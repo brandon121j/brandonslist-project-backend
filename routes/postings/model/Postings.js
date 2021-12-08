@@ -14,6 +14,9 @@ const postsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    picture: {
+        type: String,
+    },
     price: {
         type: Number,
         required: [true, 'price is required'],
