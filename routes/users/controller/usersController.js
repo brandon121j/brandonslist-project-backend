@@ -10,7 +10,6 @@ async function createUser(req, res, next) {
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
 			email: req.body.email,
-			username: req.body.username,
 			password: hashedPassword,
 		});
 
