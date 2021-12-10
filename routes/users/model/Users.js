@@ -16,8 +16,9 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-		required: [true, 'Please provide your email'],
 		unique: true,
+        dropDups: true,
+		required: [true, 'Please provide your email'],
 		lowercase: true,
 		validate: [validator.isEmail, 'Please provide a valid email'],
 		trim: true
