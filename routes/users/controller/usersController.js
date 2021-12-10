@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
-const User = require('../model/User');
-const ErrorClass = require('../../utils/error/ErrorClass');
+const User = require('../model/Users');
 
 async function createUser(req, res, next) {
 	try {

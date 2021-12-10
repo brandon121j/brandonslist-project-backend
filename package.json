@@ -7,6 +7,24 @@
     "express": "^4.17.1",
     "mongoose": "^6.0.15",
     "morgan": "^1.10.0",
-    "validator": "^13.7.0"
-  }
+    "validator": "^13.7.0",
+    "zxcvbn": "^4.4.2"
+  },
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "name": "craigslist-project-backend",
+  "version": "1.0.0",
+  "description": "Backend of craigslist project",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brandon121j/craigslist-project-backend.git"
+  },
+  "author": "Brandon Johnson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brandon121j/craigslist-project-backend/issues"
+  },
+  "homepage": "https://github.com/brandon121j/craigslist-project-backend#readme"
 }
