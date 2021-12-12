@@ -81,7 +81,21 @@ async function login(req, res, next){
     }
 }
 
+const getUserInfo = async (req, res) => {
+    try {
+        const decodedData = res.locals.decodedData;
+        const foundUser = await User.findOne({ email: decodedData.email })
+            .populate('postings');
+
+        res.json({ message: "SUCCESS", payload: foundUser})
+    } catch(error) {
+        res.status(404).json({ message: "User not found", error: error.message })
+    }
+}
+
+
 module.exports = {
 	createUser,
-	login
+	login,
+	getUserInfo
 };
