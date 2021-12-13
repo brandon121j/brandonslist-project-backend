@@ -85,7 +85,7 @@ const getUserInfo = async (req, res) => {
     try {
         const decodedData = res.locals.decodedData;
         const foundUser = await User.findOne({ email: decodedData.email })
-            .populate('postings');
+            .populate('post');
 
         res.json({ message: "SUCCESS", payload: foundUser})
     } catch(error) {
