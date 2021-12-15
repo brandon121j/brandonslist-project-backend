@@ -1,5 +1,6 @@
 const Posts = require('../model/Postings');
 const Users = require('../../users/model/Users');
+const errorHandler = require('../../util/errorHandler');
 
 
 const createListing = async (req, res) => {
@@ -39,18 +40,28 @@ const createListing = async (req, res) => {
         await foundUser.save();
 
         res.json({ message: "SUCCESS", createListing })
-    } catch(e) {
+    } catch(err) {
         res.status(500).json({
             message: "ERROR",
-            error: e.message
+            error: errorHandler(err)
         });
     }
 }
 
 const getAllListings = async(req, res) => {
-    
+    try {
+        let allListings = await Posts.find({});
+
+        res.json({ message: "SUCCESS", allPostings: allListings});
+    } catch(err) {
+        res.status(500).json({
+        message: "ERROR",
+        error: errorHandler(err)
+        })
+    }
 }
 
 module.exports = {
     createListing,
+    getAllListings
 };

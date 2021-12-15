@@ -27,6 +27,7 @@ const postsSchema = new mongoose.Schema({
     },
     picture: {
         type: String,
+        default: "https://www.freeiconspng.com/uploads/no-image-icon-6.png"
     },
     price: {
         type: Number,
