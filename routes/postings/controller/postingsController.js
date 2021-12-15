@@ -5,8 +5,11 @@ const Users = require('../../users/model/Users');
 const createListing = async (req, res) => {
     let {
         category,
-        location,
+        city,
+        state,
+        zip,
         listing,
+        picture,
         price,
         description,
         userID
@@ -19,7 +22,10 @@ const createListing = async (req, res) => {
 
         const createdListing = new Posts({
             category,
-            location,
+            city,
+            state,
+            zip,
+            picture,
             listing,
             price,
             description,
@@ -39,6 +45,10 @@ const createListing = async (req, res) => {
             error: e.message
         });
     }
+}
+
+const getAllListings = async(req, res) => {
+    
 }
 
 module.exports = {

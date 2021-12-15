@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const postsSchema = new mongoose.Schema({
     category: {
@@ -6,9 +7,19 @@ const postsSchema = new mongoose.Schema({
         required: true,
         match: [/^[a-z]+$/i, 'Cannot have special characters or numbers'],
     },
-    location: {
+    city: {
         type: String,
-        required: [true, 'location is required'],
+        required: [true, 'city is required'],
+        match: [/^[a-z]+$/i, 'Cannot have special characters or numbers'],
+    },
+    state: {
+        type: String,
+        required: [true, 'state is required'],
+        match: [/^[a-z]+$/i, 'Cannot have special characters or numbers'],
+    },
+    zip: {
+        type: String,
+        required: [true, 'zip code is required'],
     },
     listing: {
         type: String,
