@@ -17,6 +17,7 @@ const createListing = async (req, res) => {
     } = req.body;
 
     try {
+        console.log(req.body)
         let decodedData = res.locals.decodedData;
 
         let foundUser = await Users.findOne({ email: decodedData.email });
@@ -61,7 +62,23 @@ const getAllListings = async(req, res) => {
     }
 }
 
+const testUpload = async(req, res) => {
+    try {
+        console.log(req.file);
+        console.log(req.body);
+        res.json({
+            message: "SUCCESS",
+        })
+    } catch(e) {
+        res.status(500).json({
+            message: "ERROR",
+            error: errorHandler(err)
+            })
+    }
+}
+
 module.exports = {
     createListing,
-    getAllListings
+    getAllListings,
+    testUpload
 };

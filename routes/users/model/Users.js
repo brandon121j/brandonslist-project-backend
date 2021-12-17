@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
 		trim: true,
     },
     usersPostings: [{ type: mongoose.Schema.ObjectId, ref: 'postings'}],
-    usersFavorites: [{ type: mongoose.Schema.ObjectId, ref: 'postings'}]
+    usersFavorites: [{ type: mongoose.Schema.ObjectId, ref: 'postings'}],
 }, {timestamps: true})
 
 module.exports = mongoose.model('user', userSchema);

@@ -15,11 +15,15 @@ if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
 }
 
-app.use(express.json({ limit: "10kb" }));
-app.use(express.urlencoded({ extended: true, limit: "10kb" }));
+// app.use(express.json({ limit: "10kb" }));
+// app.use(express.urlencoded({ extended: true, limit: "10kb" }));
+app.use(express.json());
+app.use(express.urlencoded());
 app.use(cookieParser());
+
 
 app.use("/api/auth/users", userRouter);
 app.use("/api/auth/postings", postingsRouter);
+app.use('/public/images', express.static(__dirname + '/public/images/'));
 
 module.exports = app
