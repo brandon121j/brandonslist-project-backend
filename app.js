@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const fileupload = require('express-fileupload'); 
+// const formidableMiddleware = require('express-formidable');
 
 const app = express();
 
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cookieParser());
+// app.use(formidableMiddleware());
 // app.use(fileupload({useTempFiles: true}))
 
 app.use('/api/auth/users', userRouter);
