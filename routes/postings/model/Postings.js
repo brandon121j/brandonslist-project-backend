@@ -39,6 +39,9 @@ const postsSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Description is required'],
     },
+    picture_id: {
+        type: String
+    },
     userID: {
         type: mongoose.Schema.ObjectId,
         ref: 'users'

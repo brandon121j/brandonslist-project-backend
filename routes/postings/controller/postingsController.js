@@ -6,6 +6,7 @@ const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv');
 
 dotenv.config();
+
 cloudinary.config({
 	cloud_name: process.env.cloud_name,
 	api_key: process.env.api_key,
@@ -42,6 +43,8 @@ const createListing = async(req, res) => {
 				if (error) {
 					return res.status(500).json({ ERROR: error });
 				} else {
+					console.log(result)
+
 					let decodedData = res.locals.decodedData;
 
 					let foundUser = await Users.findOne({ email: decodedData.email });
@@ -56,6 +59,7 @@ const createListing = async(req, res) => {
 						price,
 						description,
 						userID,
+						picture_id: result.public_id
 					});
 
 					let savedListing = await createdListing.save();
@@ -84,12 +88,6 @@ const getUsersListings = async (req, res) => {
 		let decodedData = res.locals.decodedData;
 
 		let foundUser = await Users.findOne({ email: decodedData.email }).populate('usersPostings');
-
-		let postings = await Posts.find({})
-
-		let filteredPostings = postings.map((item) => item._id);
-
-		let usersPosts = postings.filter((item) => item);
 
 		res.json({ payload: foundUser });
 	} catch (err) {
@@ -128,9 +126,64 @@ const testUpload = async (req, res) => {
 	}
 };
 
+const deletePost = async(req, res) => {
+	try {
+
+		let picture = await Posts.findById(req.params.id);
+
+		console.log(picture)
+
+		cloudinary.uploader.destroy(picture.picture_id, function(result) { console.log(result) });
+
+		const decodedData = res.locals.decodedData;
+
+		let deletedPost = await Posts.findByIdAndDelete(req.params.id);
+
+		let foundUser = await Users.findOne({ email: decodedData.email });
+
+		console.log(foundUser)
+
+		let filteredPosts = foundUser.usersPostings.filter((item) => {
+			console.log(item)
+			item.toString() !== picture._id.toString();
+		});
+
+		foundUser.usersPostings = filteredPosts;
+
+		await foundUser.save();
+
+		res.json({
+			message: "SUCCESS",
+			deleted: deletedPost,
+		});
+	} catch(err) {
+		res.status(500).json({
+			message: 'ERROR',
+			error: errorHandler(err),
+		});
+	}
+}
+
+const addFavorite = async(req, res) => {
+	try {
+		let decodedData = res.locals.decodedData;
+
+		let foundUser = await Users.findOne({ email: decodedData.email });
+
+		foundUser.usersFavorites.push(req.params.id);
+	} catch(err) {
+		res.status(500).json({
+			message: 'ERROR',
+			error: errorHandler(err),
+		});
+	}
+}
+
 module.exports = {
 	createListing,
 	getAllListings,
 	testUpload,
 	getUsersListings,
+	deletePost,
+	addFavorite
 };
