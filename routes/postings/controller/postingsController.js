@@ -19,7 +19,6 @@ const createListing = async(req, res) => {
 		const form = formidable({ multiples: true });
 
 		form.parse(req, (err, fields, files) => {
-			// console.log("WORKGIN!!!!!!")
 			if (err) {
 				res.status(500).json({
 					message: 'ERROR',
@@ -43,7 +42,6 @@ const createListing = async(req, res) => {
 				if (error) {
 					return res.status(500).json({ ERROR: error });
 				} else {
-					console.log(result)
 
 					let decodedData = res.locals.decodedData;
 
@@ -131,8 +129,6 @@ const deletePost = async(req, res) => {
 
 		let picture = await Posts.findById(req.params.id);
 
-		console.log(picture)
-
 		cloudinary.uploader.destroy(picture.picture_id, function(result) { console.log(result) });
 
 		const decodedData = res.locals.decodedData;
@@ -141,11 +137,8 @@ const deletePost = async(req, res) => {
 
 		let foundUser = await Users.findOne({ email: decodedData.email });
 
-		console.log(foundUser)
-
 		let filteredPosts = foundUser.usersPostings.filter((item) => {
-			console.log(item)
-			item.toString() !== picture._id.toString();
+			return item !== picture._id;
 		});
 
 		foundUser.usersPostings = filteredPosts;
@@ -162,22 +155,147 @@ const deletePost = async(req, res) => {
 			error: errorHandler(err),
 		});
 	}
-}
+};
 
-const addFavorite = async(req, res) => {
+const addToFavorites = async(req, res) => {
 	try {
-		let decodedData = res.locals.decodedData;
+		const decodedData = res.locals.decodedData;
 
 		let foundUser = await Users.findOne({ email: decodedData.email });
 
 		foundUser.usersFavorites.push(req.params.id);
+
+		await foundUser.save();
+
+		res.json({
+			MESSAGE: "SUCCESS",
+			PAYLOAD: foundUser
+		})
 	} catch(err) {
 		res.status(500).json({
 			message: 'ERROR',
 			error: errorHandler(err),
 		});
 	}
-}
+};
+
+const removeFromFavorites = async(req, res) => {
+	try {
+		let favorite = await Posts.findById(req.params.id)
+
+		const decodedData = res.locals.decodedData;
+
+		let foundUser = await Users.findOne({ email: decodedData.email });
+
+		let filteredFavorites = foundUser.usersFavorites.filter((item) => {
+			return item.toString() !== favorite._id.toString();
+		});
+		
+		foundUser.usersFavorites = filteredFavorites;
+
+		await foundUser.save();
+
+		res.json({
+			message: "SUCCESS",
+			deleted: foundUser,
+		});
+	} catch(err) {
+		res.status(500).json({
+			message: 'ERROR',
+			error: errorHandler(err),
+		});
+	}
+};
+
+const getUsersFavorites = async(req, res) => {
+	try {
+		let decodedData = res.locals.decodedData;
+
+		let foundUser = await Users.findOne({ email: decodedData.email }).populate('usersFavorites');
+
+		res.json({ payload: foundUser })
+	} catch(err) {
+		res.status(500).json({
+			message: 'ERROR',
+			error: errorHandler(err),
+		});
+	}
+};
+
+const singleListing = async(req, res) => {
+	try {
+		let singleListing = await Posts.findById(req.params.id);
+
+		res.json({ MESSAGE: "SUCCESS", payload: singleListing})
+	} catch(err) {
+		res.status(500).json({
+			message: 'ERROR',
+			error: errorHandler(err),
+		});
+	}
+};
+
+const updateListing = async(req, res) => {
+	try {
+		const form = formidable({ multiples: true });
+
+		let foundPost = await Posts.findById(req.params.id);
+
+		form.parse(req, (err, fields, files) => {
+			if (err) {
+				res.status(500).json({
+					message: 'ERROR',
+					error: errorHandler(err),
+				});
+			}
+
+			let {
+				category,
+				city,
+				state,
+				zip,
+				listing,
+				picture,
+				price,
+				description,
+				userID,
+			} = fields;
+
+			cloudinary.uploader.destroy(foundPost.picture_id, function(result) { console.log(result) });
+
+			cloudinary.uploader.upload(files.picture.filepath, async(error, result) => {
+				if (error) {
+					return res.status(500).json({ ERROR: error });
+				} else {
+
+					let decodedData = res.locals.decodedData;
+					
+					let updatedListing = await Posts.findByIdAndUpdate(req.params.id, {
+						category,
+						city,
+						state,
+						zip,
+						picture: result.secure_url,
+						listing,
+						price,
+						description,
+						userID,
+						picture_id: result.public_id
+					}, { new: true });
+
+					res.json({
+						MESSAGE: 'SUCCESS',
+					});
+				}
+			});
+		});
+	} catch (err) {
+		res.status(500).json({
+			message: 'ERROR',
+			error: errorHandler(err),
+		});
+	}
+};
 
 module.exports = {
 	createListing,
@@ -185,5 +303,9 @@ module.exports = {
 	testUpload,
 	getUsersListings,
 	deletePost,
-	addFavorite
+	addToFavorites,
+	singleListing,
+	getUsersFavorites,
+	removeFromFavorites,
+	updateListing
 };

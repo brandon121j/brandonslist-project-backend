@@ -3,7 +3,6 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const fileupload = require('express-fileupload'); 
-// const formidableMiddleware = require('express-formidable');
 
 const app = express();
 
@@ -18,13 +17,9 @@ if (process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'));
 }
 
-// app.use(express.json({ limit: "10kb" }));
-// app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cookieParser());
-// app.use(formidableMiddleware());
-// app.use(fileupload({useTempFiles: true}))
 
 app.use('/api/auth/users', userRouter);
 app.use('/api/auth/postings', postingsRouter);

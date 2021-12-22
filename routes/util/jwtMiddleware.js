@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 function jwtMiddleware(req, res, next) {
     try {
-
+        console.log(req.headers)
         if (req.headers && req.headers.authorization) {
             
             let notDecodedToken = req.headers.authorization;

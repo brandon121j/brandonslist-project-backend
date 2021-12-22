@@ -5,12 +5,10 @@ const postsSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        match: [/^[a-z]+$/i, 'Cannot have special characters or numbers'],
     },
     city: {
         type: String,
         required: [true, 'city is required'],
-        match: [/^[a-z]+$/i, 'Cannot have special characters or numbers'],
     },
     state: {
         type: String,
