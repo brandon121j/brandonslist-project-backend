@@ -39,7 +39,7 @@ async function login(req, res, next){
     const {email, password } = req.body
 
     try{
-        let foundUser = await User.findOne({email: email})
+        let foundUser = await User.findOne({ email: email })
 
         if(!foundUser){
             res.status(500).json({
@@ -74,10 +74,10 @@ async function login(req, res, next){
                 })
             }
         }
-    }catch(e){
+    }catch(err){
         res.status(500).json({
             message: 'error',
-            error : errorHandler(e)})
+            error : errorHandler(err)})
     }
 }
 
@@ -88,8 +88,8 @@ const getUserInfo = async (req, res) => {
             .populate('post');
 
         res.json({ message: "SUCCESS", payload: foundUser})
-    } catch(error) {
-        res.status(404).json({ message: "User not found", error: error.message })
+    } catch(err) {
+        res.status(404).json({ message: "User not found", error: err.message })
     }
 }
 

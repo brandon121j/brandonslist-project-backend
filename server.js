@@ -7,8 +7,8 @@ const app = require('./app');
 
 mongoose
 	.connect(process.env.MONGODB, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
+		// useNewUrlParser: true,
+		// useUnifiedTopology: true,
 	})
 	.then(() => {
 		console.log('DB connection successful!');
@@ -17,7 +17,7 @@ mongoose
 
 		app.listen(port, () => {
 			console.log(`App running on port ${port}...`);
-		});
+		})
 	})
 	.catch((e) => {
 		console.log(e)
