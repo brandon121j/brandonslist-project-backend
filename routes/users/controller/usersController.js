@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const errorHandler = require('../../util/errorHandler');
 
 
-async function createUser(req, res, next) {
+async function createUser(req, res) {
 	const { firstName, lastName, email, password } = req.body;
 	try {
 		let salt = await bcrypt.genSalt(12);
@@ -35,7 +35,7 @@ async function createUser(req, res, next) {
 	}
 }
 
-async function login(req, res, next){
+async function login(req, res) {
     const {email, password } = req.body
 
     try{

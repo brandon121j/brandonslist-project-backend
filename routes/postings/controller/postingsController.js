@@ -38,7 +38,7 @@ const createListing = async(req, res) => {
 				userID,
 			} = fields;
 
-			cloudinary.uploader.upload(files.picture.filepath, async(error, result) => {
+			cloudinary.uploader.upload(files.picture.filepath, {folder: 'brandonsList'}, async(error, result) => {
 				if (error) {
 					return res.status(500).json({ ERROR: error });
 				} else {
