@@ -62,7 +62,7 @@ async function login(req, res) {
                         firstName: foundUser.firstName,
                         lastName: foundUser.lastName,
                         email : foundUser.email,
-                        id : foundUser._id
+                        id : foundUser._id,
                     },
                     process.env.JWT_SECRET,
                     {expiresIn : "24h"}

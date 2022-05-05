@@ -111,8 +111,6 @@ const getAllListings = async (req, res) => {
 
 const testUpload = async (req, res) => {
 	try {
-		console.log(req.file);
-		console.log(req.body);
 		res.json({
 			message: 'SUCCESS',
 		});
@@ -159,18 +157,25 @@ const deletePost = async(req, res) => {
 
 const addToFavorites = async(req, res) => {
 	try {
+
 		const decodedData = res.locals.decodedData;
 
 		let foundUser = await Users.findOne({ email: decodedData.email });
 
-		foundUser.usersFavorites.push(req.params.id);
+		let alreadyAdded = foundUser.usersFavorites.indexOf(req.params.id) > -1 
 
-		await foundUser.save();
+		if (alreadyAdded) {
+			res.json({ message: 'Listing already in favorites'})
+		} else {
+
+		foundUser.usersFavorites.push(req.params.id)
+
+		await foundUser.save()
 
 		res.json({
-			MESSAGE: "SUCCESS",
-			PAYLOAD: foundUser
-		})
+			message: "Listing added to favorites!",
+		});
+	}
 	} catch(err) {
 		res.status(500).json({
 			message: 'ERROR',

@@ -2,7 +2,6 @@ const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const fileupload = require('express-fileupload'); 
 
 const app = express();
 
@@ -11,7 +10,7 @@ const postingsRouter = require('./routes/postings/postingsRouter');
 
 
 app.use(cors());
-app.options('*', cors());
+// app.options('http://localhost:4000/', cors());
 
 if (process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'));
@@ -23,6 +22,6 @@ app.use(cookieParser());
 
 app.use('/api/auth/users', userRouter);
 app.use('/api/auth/postings', postingsRouter);
-app.use('/public/images', express.static(__dirname + '/public/images/'));
+app.use('/api/public/images', express.static(__dirname + '/public/images/'));
 
 module.exports = app;
